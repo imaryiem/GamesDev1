@@ -7,6 +7,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 15.0f;
 
     private InputManager inputManager;
+    private CameraManager cameraManager;
     private Transform cameraTransform;
     private Vector3 movementDirection;
     private Rigidbody playerRigidbody;
@@ -16,12 +17,18 @@ public class PlayerMovementController : MonoBehaviour
         cameraTransform = Camera.main.transform;
         playerRigidbody = GetComponent<Rigidbody>();
         inputManager = GetComponent<InputManager>();
+        cameraManager = FindObjectOfType<CameraManager>();
     }
 
     // To move the actual character using RigidBody (physics)
     private void FixedUpdate()
     {
         HandleAllMovement();
+    }
+
+    private void LateUpdate()
+    {
+        if (Time.timeScale != 0.0f) cameraManager.HandleAllCameraMovement();
     }
 
     // Player Input Handling
