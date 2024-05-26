@@ -38,6 +38,7 @@ public class InputManager : MonoBehaviour
         // Input events subscriptions
         keyBindings.Player.Fire.performed += playerMovementController.Fire;
         keyBindings.Player.Dash.performed += Dash;
+        keyBindings.Player.Jump.performed += animatorManager.Jump;
         keyBindings.UI.Pause.performed += Pause;
     }
 
