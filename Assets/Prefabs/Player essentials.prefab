@@ -493,7 +493,6 @@ GameObject:
   - component: {fileID: 4916712354358752001}
   - component: {fileID: 5128803428498513274}
   - component: {fileID: 8577649172125962338}
-  - component: {fileID: 7395697381674456182}
   - component: {fileID: 2070631868564533635}
   m_Layer: 3
   m_Name: Banana Man
@@ -603,25 +602,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a264efc2fb031814fad62f2849a14980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7395697381674456182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1854369615297573088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20b3315a1e21df748a74d439ce15aba1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementInput: {x: 0, y: 0}
-  cameraInput: {x: 0, y: 0}
-  moveAmount: 0
-  verticalInput: 0
-  horizontalInput: 0
-  cameraInputX: 0
-  cameraInputY: 0
 --- !u!114 &2070631868564533635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,7 +615,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 6
-  rotationSpeed: 15
+  cameraSensitivity: 15
+--- !u!1 &2087204164689977774
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7352504425109193965}
+  - component: {fileID: 5038316244547348901}
+  m_Layer: 0
+  m_Name: Input Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7352504425109193965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087204164689977774}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.7242184, y: -1.1322849, z: -0.56797147}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 313382657613701997}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5038316244547348901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087204164689977774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b3315a1e21df748a74d439ce15aba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 1854369615297573088}
+  movementInput: {x: 0, y: 0}
+  cameraInput: {x: 0, y: 0}
+  moveAmount: 0
+  cameraInputX: 0
+  cameraInputY: 0
 --- !u!1 &2234764333105359227
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,6 +2036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727dd318b03a58a458cd387b577ce994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lookAt: {fileID: 1854369615297573088}
   cameraPivot: {fileID: 4214443474513722299}
   cameraFollowSpeed: 0.05
   cameraLookSpeed: 0.5
@@ -2735,7 +2766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 313382657613701997}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player essentials
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2754,6 +2785,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7352504425109193965}
   - {fileID: 1105013533626814264}
   - {fileID: 7691004480965848220}
   m_Father: {fileID: 0}

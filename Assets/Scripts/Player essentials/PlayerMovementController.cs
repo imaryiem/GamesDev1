@@ -1,23 +1,25 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
     [Header("Movement Speeds")]
     [SerializeField] private float runSpeed = 6.0f;
-    [SerializeField] private float rotationSpeed = 15.0f;
+    [SerializeField] private float cameraSensitivity = 15.0f;
 
-    private InputManager inputManager;
-    private CameraManager cameraManager;
-    private Transform cameraTransform;
+    private InputManager im;
+    private CameraManager cm;
+
+    private Transform mainCameraTransform;
     private Vector3 movementDirection;
-    private Rigidbody playerRigidbody;
+    private Rigidbody characterRigidbody;
 
     private void Awake()
     {
-        cameraTransform = Camera.main.transform;
-        playerRigidbody = GetComponent<Rigidbody>();
-        inputManager = GetComponent<InputManager>();
-        cameraManager = FindObjectOfType<CameraManager>();
+        mainCameraTransform = Camera.main.transform;
+        characterRigidbody = GetComponent<Rigidbody>();
+        im = FindObjectOfType<InputManager>();
+        cm = FindObjectOfType<CameraManager>();
     }
 
     // To move the actual character using RigidBody (physics)
@@ -28,7 +30,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Time.timeScale != 0.0f) cameraManager.HandleAllCameraMovement();
+        if (Time.timeScale != 0.0f) cm.HandleAllCameraMovement();
     }
 
     // Player Input Handling
@@ -41,8 +43,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void HandleMovement(bool isActive)
     {
-        movementDirection = new Vector3(cameraTransform.forward.x, 0, cameraTransform.forward.z) * inputManager.verticalInput;
-        movementDirection += cameraTransform.right * inputManager.horizontalInput;
+        movementDirection = new Vector3(mainCameraTransform.forward.x, 0, mainCameraTransform.forward.z) * im.movementInput.y;
+        movementDirection += mainCameraTransform.right * im.movementInput.x;
 
         if (!isActive) movementDirection = new Vector3(0, 0, 0);
 
@@ -52,16 +54,16 @@ public class PlayerMovementController : MonoBehaviour
         movementDirection *= GetPlayerSpeed();
 
         Vector3 movementVelocity = movementDirection;
-        movementVelocity.y = playerRigidbody.velocity.y;
-        playerRigidbody.velocity = movementVelocity;
+        movementVelocity.y = characterRigidbody.velocity.y;
+        characterRigidbody.velocity = movementVelocity;
     }
 
     private void HandleRotation(bool isActive)
     {
         Vector3 targetDirection = Vector3.zero;
 
-        targetDirection = cameraTransform.forward * inputManager.verticalInput;
-        targetDirection += cameraTransform.right * inputManager.horizontalInput;
+        targetDirection = mainCameraTransform.forward * im.movementInput.y;
+        targetDirection += mainCameraTransform.right * im.movementInput.x;
 
         if (!isActive) targetDirection = new Vector3(0, 0, 0);
 
@@ -71,9 +73,15 @@ public class PlayerMovementController : MonoBehaviour
         if (targetDirection == Vector3.zero) targetDirection = transform.forward;
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, cameraSensitivity * Time.deltaTime);
 
         transform.rotation = playerRotation;
+    }
+
+    // Trigged from the Input Manager class
+    public void Fire(InputAction.CallbackContext context)
+    {
+        Debug.Log("firing!");
     }
 
     // Extra function to return run speed (function might expand in future to include walk or sprint modes if needed)
@@ -81,7 +89,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         float speed = 0.0f;
 
-        if (inputManager.moveAmount > 0.0f) { speed = runSpeed; }
+        if (im.moveAmount > 0.0f) { speed = runSpeed; }
 
         // Debug.Log($"Setting speed to: {speed}...");
         return speed;
