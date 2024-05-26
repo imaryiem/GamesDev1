@@ -4,8 +4,13 @@ using UnityEngine.InputSystem;
 public class PlayerMovementController : MonoBehaviour
 {
     [Header("Movement Speeds")]
+    [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float runSpeed = 6.0f;
+    [SerializeField] private float dashSpeed = 10.0f;
     [SerializeField] private float cameraSensitivity = 15.0f;
+
+    [Header("Monitor speed (do not edit)")]
+    [SerializeField] private float currentSpeed = 6.0f;
 
     private InputManager im;
     private CameraManager cm;
@@ -87,11 +92,19 @@ public class PlayerMovementController : MonoBehaviour
     // Extra function to return run speed (function might expand in future to include walk or sprint modes if needed)
     private float GetPlayerSpeed()
     {
-        float speed = 0.0f;
+        switch (im.animationVelocityModifier)
+        {
+            case 3:
+                currentSpeed = dashSpeed; break;
+            case 2:
+                currentSpeed = runSpeed; break;
+            case 1:
+                currentSpeed = walkSpeed; break;
+            default:
+                currentSpeed = 0; break;
+        }
 
-        if (im.moveAmount > 0.0f) { speed = runSpeed; }
-
-        // Debug.Log($"Setting speed to: {speed}...");
-        return speed;
+        // Debug.Log($"Setting speed to: {currentSpeed}...");
+        return currentSpeed;
     }
 }
