@@ -614,8 +614,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b65e54c149398847994d34c7e676d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkSpeed: 2
   runSpeed: 6
+  dashSpeed: 10
   cameraSensitivity: 15
+  currentSpeed: 6
 --- !u!1 &2087204164689977774
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,8 +667,9 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   cameraInput: {x: 0, y: 0}
   moveAmount: 0
-  cameraInputX: 0
-  cameraInputY: 0
+  animationVelocityModifier: 2
+  dashingTimeRemaining: 2
+  dashingInProgress: 0
 --- !u!1 &2234764333105359227
 GameObject:
   m_ObjectHideFlags: 0

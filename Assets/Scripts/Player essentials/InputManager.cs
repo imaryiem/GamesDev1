@@ -22,10 +22,15 @@ public class InputManager : MonoBehaviour
     public float dashingTimeRemaining = 2f;
     public bool dashingInProgress = false;
 
+    [Header("Extras")]
+    public bool isGamePaused = false;
+
     private void Awake()
     {
+        DisplayCursor(false);
+
         keyBindings = new Keybindings();
-        keyBindings.Player.Enable();
+        keyBindings.Enable();
 
         animatorManager = character.GetComponent<AnimatorManager>();
         playerMovementController = character.GetComponent<PlayerMovementController>();
@@ -33,6 +38,7 @@ public class InputManager : MonoBehaviour
         // Input events subscriptions
         keyBindings.Player.Fire.performed += playerMovementController.Fire;
         keyBindings.Player.Dash.performed += Dash;
+        keyBindings.UI.Pause.performed += Pause;
     }
 
     // Update values so that other classes can read them
@@ -76,6 +82,21 @@ public class InputManager : MonoBehaviour
         dashingInProgress = true;
     }
 
+    private void Pause(InputAction.CallbackContext context)
+    {
+        isGamePaused = !isGamePaused;
+
+        if (isGamePaused)
+        {
+            Time.timeScale = 0f;
+            DisplayCursor(true);
+        } else
+        {
+            Time.timeScale = 1f;
+            DisplayCursor(false);
+        }
+    }
+
     // Helper functions
 
     private void ResetDash()
@@ -84,5 +105,18 @@ public class InputManager : MonoBehaviour
         dashingTimeRemaining = 2f;
         dashingInProgress = false;
         //Debug.Log("dashing completed/ reset");
+    }
+
+    private void DisplayCursor(bool visibility)
+    {
+        if (visibility)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        } else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }
