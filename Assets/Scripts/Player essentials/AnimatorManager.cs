@@ -1,36 +1,26 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class AnimatorManager : MonoBehaviour
 {
     private Animator animator;
     private int velocity;
+    private int jumpAnimation;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         velocity = Animator.StringToHash("velocity");
+        jumpAnimation = Animator.StringToHash("Jump");
     }
 
-    private void Update()
-    {
-        if (animator.GetAnimatorTransitionInfo(0).IsName("Blend Tree -> Jump"))
-        {
-            Debug.Log("jump stopped");
-            animator.SetBool("jumping", false);
-        }
-    }
-
-    public void UpdateAnimatorValues(float velocity /*, bool isSprinting, bool isWalking*/)
+    public void UpdateAnimationVelocity(float velocity)
     {
         animator.SetFloat(this.velocity, velocity, 0.1f, Time.deltaTime);
     }
 
-    public void Jump(InputAction.CallbackContext context)
+    public void PlayJumpAnimation()
     {
-        // TODO: jump
-        Debug.Log("jump performed (WIP)");
-        animator.SetBool("jumping", true);
+        animator.Play(jumpAnimation);
     }
 
     public void FootStepsSound()

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
@@ -42,16 +41,14 @@ public class PlayerMovementController : MonoBehaviour
 
     public void HandleAllMovement()
     {
-        HandleMovement(true);
-        HandleRotation(true);
+        HandleMovement();
+        HandleRotation();
     }
 
-    private void HandleMovement(bool isActive)
+    private void HandleMovement()
     {
         movementDirection = new Vector3(mainCameraTransform.forward.x, 0, mainCameraTransform.forward.z) * im.movementInput.y;
         movementDirection += mainCameraTransform.right * im.movementInput.x;
-
-        if (!isActive) movementDirection = new Vector3(0, 0, 0);
 
         movementDirection.Normalize();
         movementDirection.y = 0;
@@ -63,14 +60,12 @@ public class PlayerMovementController : MonoBehaviour
         characterRigidbody.velocity = movementVelocity;
     }
 
-    private void HandleRotation(bool isActive)
+    private void HandleRotation()
     {
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = mainCameraTransform.forward * im.movementInput.y;
         targetDirection += mainCameraTransform.right * im.movementInput.x;
-
-        if (!isActive) targetDirection = new Vector3(0, 0, 0);
 
         targetDirection.Normalize();
         targetDirection.y = 0;
@@ -83,16 +78,10 @@ public class PlayerMovementController : MonoBehaviour
         transform.rotation = playerRotation;
     }
 
-    // Trigged from the Input Manager class
-    public void Fire(InputAction.CallbackContext context)
-    {
-        Debug.Log("firing!");
-    }
-
     // Extra function to return run speed (function might expand in future to include walk or sprint modes if needed)
     private float GetPlayerSpeed()
     {
-        switch (im.animationVelocityModifier)
+        switch (im.animationSelector)
         {
             case 3:
                 currentSpeed = dashSpeed; break;

@@ -4,10 +4,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     private Keybindings keyBindings;
-    private AnimatorManager animatorManager;
-    private PlayerMovementController playerMovementController;
-
-    [SerializeField] private GameObject character;
+    private AnimatorManager am;
 
     [Header("Monitor input values (do not edit)")]
     [Header("Main 2D Axis")]
@@ -16,7 +13,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Animation Velocity")]
     public float moveAmount;
-    public int animationVelocityModifier = 2; // 0 = idle | 1 = walk | 2 = run | 3 = sprint
+    public int animationSelector = 2; // 0 = idle | 1 = walk | 2 = run | 3 = sprint
 
     [Header("Dashing (Sprinting)")]
     public float dashingTimeRemaining = 2f;
@@ -32,13 +29,11 @@ public class InputManager : MonoBehaviour
         keyBindings = new Keybindings();
         keyBindings.Enable();
 
-        animatorManager = character.GetComponent<AnimatorManager>();
-        playerMovementController = character.GetComponent<PlayerMovementController>();
+        am = GetComponent<AnimatorManager>();
 
         // Input events subscriptions
-        keyBindings.Player.Fire.performed += playerMovementController.Fire;
         keyBindings.Player.Dash.performed += Dash;
-        keyBindings.Player.Jump.performed += animatorManager.Jump;
+        keyBindings.Player.Jump.performed += Jump;
         keyBindings.UI.Pause.performed += Pause;
     }
 
@@ -52,7 +47,7 @@ public class InputManager : MonoBehaviour
         {
             if (dashingTimeRemaining > 0)
             {
-                animationVelocityModifier = 3;
+                animationSelector = 3;
 
                 dashingTimeRemaining -= Time.deltaTime;
 
@@ -60,26 +55,31 @@ public class InputManager : MonoBehaviour
                 currentTime += 1f;
                 float secs = Mathf.Floor(currentTime % 60);
                 //Debug.Log("seconds: " + secs);
-            } else
+            }
+            else
             {
                 ResetDash();
             }
         }
 
-        moveAmount = Mathf.Clamp01(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.y)) / 3; // divide by 3 to separate the animations timings
-        moveAmount *= animationVelocityModifier;
+        moveAmount = Mathf.Clamp01(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.y)) / 3; // divide by 3 to split the animations timings
+        moveAmount *= animationSelector;
 
         if (moveAmount == 0)
         {
             ResetDash();
         }
 
-        animatorManager.UpdateAnimatorValues(moveAmount);
+        am.UpdateAnimationVelocity(moveAmount);
+    }
+
+    public void Jump(InputAction.CallbackContext context)
+    {
+        am.PlayJumpAnimation();
     }
 
     private void Dash(InputAction.CallbackContext context)
     {
-        //Debug.Log("dash performed");
         dashingInProgress = true;
     }
 
@@ -91,7 +91,8 @@ public class InputManager : MonoBehaviour
         {
             Time.timeScale = 0f;
             DisplayCursor(true);
-        } else
+        }
+        else
         {
             Time.timeScale = 1f;
             DisplayCursor(false);
@@ -102,7 +103,7 @@ public class InputManager : MonoBehaviour
 
     private void ResetDash()
     {
-        animationVelocityModifier = 2;
+        animationSelector = 2;
         dashingTimeRemaining = 2f;
         dashingInProgress = false;
         //Debug.Log("dashing completed/ reset");
@@ -114,7 +115,8 @@ public class InputManager : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-        } else
+        }
+        else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
