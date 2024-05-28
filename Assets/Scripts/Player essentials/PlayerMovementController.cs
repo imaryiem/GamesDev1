@@ -6,6 +6,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float runSpeed = 6.0f;
     [SerializeField] private float dashSpeed = 10.0f;
+    [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float cameraSensitivity = 15.0f;
 
     [Header("Monitor speed (do not edit)")]
@@ -43,6 +44,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
+        HandleJump();
     }
 
     private void HandleMovement()
@@ -76,6 +78,15 @@ public class PlayerMovementController : MonoBehaviour
         Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, cameraSensitivity * Time.deltaTime);
 
         transform.rotation = playerRotation;
+    }
+
+    private void HandleJump()
+    {
+        if (im.jumpPressed && im.isGrounded)
+        {
+            characterRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            im.jumpPressed = false;
+        }
     }
 
     // Extra function to return run speed (function might expand in future to include walk or sprint modes if needed)
