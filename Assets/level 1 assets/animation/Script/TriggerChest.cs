@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class TriggerChest : MonoBehaviour
+public class Chest : MonoBehaviour
 {
     [SerializeField] private Animator myChest = null;
     [SerializeField] private KeySpawnManager keySpawnManager; // Reference to the KeySpawnManager
