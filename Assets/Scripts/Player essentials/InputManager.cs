@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
         keyBindings.Enable();
 
         am = GetComponent<AnimatorManager>();
-        pauseMenu = GameObject.FindGameObjectWithTag("Menu");
+        pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu");
         pauseMenu.SetActive(false);
 
         // Input events subscriptions
