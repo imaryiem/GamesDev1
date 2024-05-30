@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    public GameObject lookAt;
     public Transform cameraPivot; // The object the camera uses to look up & down (pivot)
     public float cameraFollowSpeed = 0.2f;
     public float cameraLookSpeed = 1.0f;
@@ -16,18 +17,18 @@ public class CameraManager : MonoBehaviour
     public float pivotAngle; // Camera looking left & right
 
     private float defaultPosition;
-    private Transform cameraTransform;
+    private Transform mainCameraTransform;
     private Transform targetTransform; // The object that the camera will follow
     private Vector3 cameraFollowVelocity = Vector3.zero;
     private Vector3 cameraVectorPosition;
-    private InputManager inputManager;
+    private InputManager im;
 
     private void Awake()
     {
-        targetTransform = FindObjectOfType<PlayerMovementController>().transform;
-        inputManager = FindObjectOfType<InputManager>();
-        cameraTransform = Camera.main.transform;
-        defaultPosition = cameraTransform.localPosition.z;
+        targetTransform = lookAt.transform;
+        im = FindObjectOfType<InputManager>();
+        mainCameraTransform = Camera.main.transform;
+        defaultPosition = mainCameraTransform.localPosition.z;
     }
 
     public void HandleAllCameraMovement()
@@ -49,8 +50,8 @@ public class CameraManager : MonoBehaviour
         Vector3 rotation;
         Quaternion targetRotation;
 
-        lookAngle += inputManager.cameraInputX * cameraLookSpeed;
-        pivotAngle -= inputManager.cameraInputY * cameraPivotSpeed;
+        lookAngle += im.cameraInput.x * cameraLookSpeed;
+        pivotAngle -= im.cameraInput.y * cameraPivotSpeed;
         pivotAngle = Mathf.Clamp(pivotAngle, minimumPivotAngle, maximumPivotAngle);
 
         // Y Axis
@@ -70,7 +71,7 @@ public class CameraManager : MonoBehaviour
     {
         float targetPosition = defaultPosition;
         RaycastHit hit;
-        Vector3 direction = cameraTransform.position - cameraPivot.position;
+        Vector3 direction = mainCameraTransform.position - cameraPivot.position;
         direction.Normalize();
 
         if (Physics.SphereCast(cameraPivot.transform.position, cameraCollisionRadius, direction, out hit, Mathf.Abs(targetPosition), collisionLayers))
@@ -84,7 +85,7 @@ public class CameraManager : MonoBehaviour
             targetPosition -= minimumCollisionOffset;
         }
 
-        cameraVectorPosition.z = Mathf.Lerp(cameraTransform.localPosition.z, targetPosition, 0.2f);
-        cameraTransform.localPosition = cameraVectorPosition;
+        cameraVectorPosition.z = Mathf.Lerp(mainCameraTransform.localPosition.z, targetPosition, 0.2f);
+        mainCameraTransform.localPosition = cameraVectorPosition;
     }
 }

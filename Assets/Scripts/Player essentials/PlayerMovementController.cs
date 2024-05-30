@@ -3,21 +3,28 @@ using UnityEngine;
 public class PlayerMovementController : MonoBehaviour
 {
     [Header("Movement Speeds")]
+    [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float runSpeed = 6.0f;
-    [SerializeField] private float rotationSpeed = 15.0f;
+    [SerializeField] private float dashSpeed = 10.0f;
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float cameraSensitivity = 15.0f;
 
-    private InputManager inputManager;
-    private CameraManager cameraManager;
-    private Transform cameraTransform;
+    [Header("Monitor speed (do not edit)")]
+    [SerializeField] private float currentSpeed = 6.0f;
+
+    private InputManager im;
+    private CameraManager cm;
+
+    private Transform mainCameraTransform;
     private Vector3 movementDirection;
-    private Rigidbody playerRigidbody;
+    private Rigidbody characterRigidbody;
 
     private void Awake()
     {
-        cameraTransform = Camera.main.transform;
-        playerRigidbody = GetComponent<Rigidbody>();
-        inputManager = GetComponent<InputManager>();
-        cameraManager = FindObjectOfType<CameraManager>();
+        mainCameraTransform = Camera.main.transform;
+        characterRigidbody = GetComponent<Rigidbody>();
+        im = FindObjectOfType<InputManager>();
+        cm = FindObjectOfType<CameraManager>();
     }
 
     // To move the actual character using RigidBody (physics)
@@ -28,23 +35,22 @@ public class PlayerMovementController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Time.timeScale != 0.0f) cameraManager.HandleAllCameraMovement();
+        if (Time.timeScale != 0.0f) cm.HandleAllCameraMovement();
     }
 
     // Player Input Handling
 
     public void HandleAllMovement()
     {
-        HandleMovement(true);
-        HandleRotation(true);
+        HandleMovement();
+        HandleRotation();
+        HandleJump();
     }
 
-    private void HandleMovement(bool isActive)
+    private void HandleMovement()
     {
-        movementDirection = new Vector3(cameraTransform.forward.x, 0, cameraTransform.forward.z) * inputManager.verticalInput;
-        movementDirection += cameraTransform.right * inputManager.horizontalInput;
-
-        if (!isActive) movementDirection = new Vector3(0, 0, 0);
+        movementDirection = new Vector3(mainCameraTransform.forward.x, 0, mainCameraTransform.forward.z) * im.movementInput.y;
+        movementDirection += mainCameraTransform.right * im.movementInput.x;
 
         movementDirection.Normalize();
         movementDirection.y = 0;
@@ -52,18 +58,16 @@ public class PlayerMovementController : MonoBehaviour
         movementDirection *= GetPlayerSpeed();
 
         Vector3 movementVelocity = movementDirection;
-        movementVelocity.y = playerRigidbody.velocity.y;
-        playerRigidbody.velocity = movementVelocity;
+        movementVelocity.y = characterRigidbody.velocity.y;
+        characterRigidbody.velocity = movementVelocity;
     }
 
-    private void HandleRotation(bool isActive)
+    private void HandleRotation()
     {
         Vector3 targetDirection = Vector3.zero;
 
-        targetDirection = cameraTransform.forward * inputManager.verticalInput;
-        targetDirection += cameraTransform.right * inputManager.horizontalInput;
-
-        if (!isActive) targetDirection = new Vector3(0, 0, 0);
+        targetDirection = mainCameraTransform.forward * im.movementInput.y;
+        targetDirection += mainCameraTransform.right * im.movementInput.x;
 
         targetDirection.Normalize();
         targetDirection.y = 0;
@@ -71,19 +75,36 @@ public class PlayerMovementController : MonoBehaviour
         if (targetDirection == Vector3.zero) targetDirection = transform.forward;
 
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, cameraSensitivity * Time.deltaTime);
 
         transform.rotation = playerRotation;
+    }
+
+    private void HandleJump()
+    {
+        if (im.jumpPressed && im.isGrounded)
+        {
+            characterRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            im.jumpPressed = false;
+        }
     }
 
     // Extra function to return run speed (function might expand in future to include walk or sprint modes if needed)
     private float GetPlayerSpeed()
     {
-        float speed = 0.0f;
+        switch (im.animationSelector)
+        {
+            case 3:
+                currentSpeed = dashSpeed; break;
+            case 2:
+                currentSpeed = runSpeed; break;
+            case 1:
+                currentSpeed = walkSpeed; break;
+            default:
+                currentSpeed = 0; break;
+        }
 
-        if (inputManager.moveAmount > 0.0f) { speed = runSpeed; }
-
-        // Debug.Log($"Setting speed to: {speed}...");
-        return speed;
+        // Debug.Log($"Setting speed to: {currentSpeed}...");
+        return currentSpeed;
     }
 }

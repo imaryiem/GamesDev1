@@ -6,11 +6,13 @@ TagManager:
   tags:
   - Ground
   - Key
+  - PauseMenu
+  - HealthBarHUD
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - Ground
   - Water
   - UI
   - 
