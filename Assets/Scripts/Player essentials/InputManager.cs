@@ -5,6 +5,7 @@ public class InputManager : MonoBehaviour
 {
     private Keybindings keyBindings;
     private AnimatorManager am;
+    private GameObject pauseMenu;
 
     [Header("Monitor input values (do not edit)")]
     [Header("Main 2D Axis")]
@@ -37,6 +38,8 @@ public class InputManager : MonoBehaviour
         keyBindings.Enable();
 
         am = GetComponent<AnimatorManager>();
+        pauseMenu = GameObject.FindGameObjectWithTag("Menu");
+        pauseMenu.SetActive(false);
 
         // Input events subscriptions
         keyBindings.Player.Dash.performed += Dash;
@@ -104,11 +107,13 @@ public class InputManager : MonoBehaviour
         if (isGamePaused)
         {
             Time.timeScale = 0f;
+            pauseMenu.SetActive(true);
             DisplayCursor(true);
         }
         else
         {
             Time.timeScale = 1f;
+            pauseMenu.SetActive(false);
             DisplayCursor(false);
         }
     }
