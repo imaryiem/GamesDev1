@@ -1,58 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class OpenCloseDoor : MonoBehaviour
+public class Door : MonoBehaviour
 {
+    [SerializeField] private Animator myDoor = null;
+    [SerializeField] private bool triggerOpen = false;
+    [SerializeField] private bool triggerClose = false;
 
-    [SerializeField] private Animator doorAnimator = null;
-
-    private bool playerInTrigger = false;
-    private bool isDoorOpen = false;
+    private bool isOpening = false;
+    private bool isClosing = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            playerInTrigger = true;
+            if (triggerOpen)
+            {
+                Debug.Log("Press F to open the door");
+                isOpening = true;
+            }
+            else if (triggerClose)
+            {
+                Debug.Log("Door will close automatically");
+                isClosing = true;
+            }
         }
     }
 
-    private void OnTriggerExit(Collider other) 
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            playerInTrigger = false;
+            if (triggerOpen)
+            {
+                isOpening = false;
+            }
+            else if (triggerClose)
+            {
+                isClosing = false;
+            }
         }
     }
 
-
     private void Update()
     {
-        if (playerInTrigger)
+        if (isOpening && Input.GetKeyDown(KeyCode.F))
         {
-            if (isDoorOpen)
-            {
-                Debug.Log("Press F to CLOSE");
-            }
-            else
-            {
-                Debug.Log("Press F to OPEN");
-            }
+            myDoor.Play("doorOpen", 0, 0.0f);
+            isOpening = false;
+        }
 
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                if(isDoorOpen)
-                {
-                    doorAnimator.Play("doorClose", 0, 0.0f);
-                    isDoorOpen = false;
-                } else
-                {
-                    doorAnimator.Play("doorOpen", 0, 0.0f);
-                    isDoorOpen = true;
-                }
-            }
+        if (isClosing)
+        {
+            myDoor.Play("doorClose", 0, 0.0f);
+            isClosing = false;
+            gameObject.SetActive(false);
         }
     }
 }
