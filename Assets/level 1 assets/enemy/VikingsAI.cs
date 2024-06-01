@@ -3,111 +3,231 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RandomMovement : MonoBehaviour
+public class FollowPlayerOnSight : MonoBehaviour
 {
-    public NavMeshAgent agent;
-    public Transform[] patrolPoints; // Array of predefined patrol points
-    public float wanderTimer = 5f;   // Time between wander updates
-    public float detectionRange = 10f; // Range within which the agent can detect the player
-    public float attackRange = 2f; // Range within which the agent attacks the player
-    public LayerMask playerLayer; // Layer to detect the player
+    public NavMeshAgent navMeshAgent;
+    public float stratWaitTime = 4;
+    public float timeToRotate = 2;
+    public float speedWalk = 6;
+    public float speedRun = 9;
 
-    private float timer;
-    private int currentPointIndex;
-    private Transform player;
+    // Enemy view angle and radius
+    public float viewRad = 15;
+    public float viewAng = 90;
+    public LayerMask playerMask;
+    public LayerMask obstacleMask;
+    public float meshResolution = 1f;
+    public int edgeIteration = 4;
+    public float edgeDistance = 0.5f;
 
-   void Start()
-{
-    timer = wanderTimer;
-    GameObject playerObject = GameObject.FindGameObjectWithTag("Player"); // Find the player by tag
+    public Transform[] waypoints;
+    int m_CurrentWayPointIndex;
 
-    if (playerObject != null)
+    Vector3 playerLastPosition = Vector3.zero;
+    Vector3 m_PlayerPosition;
+
+    float m_WaitTime;
+    float m_TimeToRotate;
+    bool m_PlayerInRange;
+    bool m_PlayerNear;
+    bool m_IsPatrol;
+    bool m_CaughtPlayer;
+
+    void Start()
     {
-        player = playerObject.transform;
-        if (patrolPoints.Length > 0)
-        {
-            currentPointIndex = Random.Range(0, patrolPoints.Length);
-            agent.SetDestination(patrolPoints[currentPointIndex].position);
-        }
-        else
-        {
-            Debug.LogWarning("No patrol points set!");
-        }
-    }
-    else
-    {
-        Debug.LogError("Player GameObject not found! Make sure there is a GameObject tagged as 'Player'.");
-    }
-}
+        m_PlayerPosition = Vector3.zero;
+        m_IsPatrol = true;
+        m_CaughtPlayer = false;
+        m_PlayerInRange = false;
+        m_WaitTime = stratWaitTime;
+        m_TimeToRotate = timeToRotate;
 
+        m_CurrentWayPointIndex = 0;
+        navMeshAgent = GetComponent<NavMeshAgent>();
+
+        navMeshAgent.isStopped = false;
+        navMeshAgent.speed = speedWalk;
+        navMeshAgent.SetDestination(waypoints[m_CurrentWayPointIndex].position);
+    }
 
     void Update()
     {
-        timer += Time.deltaTime;
-
-        if (IsPlayerInSight())
+        EnviromentView();
+        if (!m_IsPatrol)
         {
-            FollowPlayer();
+            Chasing();
         }
         else
         {
-            if (timer >= wanderTimer)
+            Patroling();
+        }
+    }
+
+    private void Chasing()
+    {
+        m_PlayerNear = false;
+        playerLastPosition = Vector3.zero;
+
+        if (!m_CaughtPlayer)
+        {
+            Move(speedRun);
+            navMeshAgent.SetDestination(m_PlayerPosition);
+        }
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            if (m_WaitTime <= 0 && !m_CaughtPlayer && Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) >= 6f)
             {
-                MoveToRandomPoint();
-                timer = 0f;
+                m_IsPatrol = true;
+                m_PlayerNear = false;
+                Move(speedWalk);
+                m_TimeToRotate = timeToRotate;
+                m_WaitTime = stratWaitTime;
+                SetNextDestination();
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) >= 2.5f)
+                {
+                    m_IsPatrol = true;
+                    m_PlayerNear = false;
+                    Move(speedWalk);
+                    m_TimeToRotate = timeToRotate;
+                    m_WaitTime = stratWaitTime;
+                    SetNextDestination();
+                }
+                else
+                {
+                    if (Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 2.5f)
+                    {
+                        Stop();
+                        m_WaitTime -= Time.deltaTime;
+                    }
+                }
             }
         }
     }
 
-    bool IsPlayerInSight()
+    private void Patroling()
     {
-        if (player == null)
+        if (m_PlayerNear)
         {
-            return false;
-        }
-
-        RaycastHit hit;
-        Vector3 rayDirection = player.position - transform.position;
-
-        if (Physics.Raycast(transform.position, rayDirection, out hit, detectionRange, playerLayer))
-        {
-            if (hit.transform.CompareTag("Player"))
+            if (m_TimeToRotate <= 0)
             {
-                return true;
+                Move(speedWalk);
+                LookingPlayer(playerLastPosition);
             }
-        }
-
-        return false;
-    }
-
-    void FollowPlayer()
-    {
-        if (player == null)
-        {
-            return;
-        }
-
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        if (distanceToPlayer > attackRange)
-        {
-            agent.SetDestination(player.position);
+            else
+            {
+                Stop();
+                m_TimeToRotate -= Time.deltaTime;
+            }
         }
         else
         {
-            // Implement attack behavior here
-            Debug.Log("Attacking the player!");
+            m_PlayerNear = false;
+            playerLastPosition = Vector3.zero;
+            Move(speedWalk);
+
+            if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+            {
+                if (m_WaitTime <= 0)
+                {
+                    NextPoint();
+                    m_WaitTime = stratWaitTime;
+                }
+                else
+                {
+                    Stop();
+                    m_WaitTime -= Time.deltaTime;
+                }
+            }
         }
     }
 
-    void MoveToRandomPoint()
+    void Move(float speed)
     {
-        if (patrolPoints.Length == 0)
+        navMeshAgent.isStopped = false;
+        navMeshAgent.speed = speed;
+    }
+
+    void Stop()
+    {
+        navMeshAgent.isStopped = true;
+        navMeshAgent.speed = 0;
+    }
+
+    public void NextPoint()
+    {
+        m_CurrentWayPointIndex = (m_CurrentWayPointIndex + 1) % waypoints.Length;
+        navMeshAgent.SetDestination(waypoints[m_CurrentWayPointIndex].position);
+    }
+
+    void CaughtPlayer()
+    {
+        m_CaughtPlayer = true;
+    }
+
+    void LookingPlayer(Vector3 player)
+    {
+        navMeshAgent.SetDestination(player);
+        if (Vector3.Distance(transform.position, player) <= 0.3f)
         {
+            if (m_WaitTime <= 0)
+            {
+                m_PlayerNear = false;
+                Move(speedWalk);
+                SetNextDestination();
+                m_WaitTime = stratWaitTime;
+                m_TimeToRotate = timeToRotate;
+            }
+            else
+            {
+                Stop();
+                m_WaitTime -= Time.deltaTime;
+            }
+        }
+    }
+
+    void EnviromentView()
+    {
+        Collider[] playerInRange = Physics.OverlapSphere(transform.position, viewRad, playerMask);
+        for (int i = 0; i < playerInRange.Length; i++)
+        {
+            Transform player = playerInRange[i].transform;
+            Vector3 dirToPlayer = (player.position - transform.position).normalized;
+            if (Vector3.Angle(transform.forward, dirToPlayer) < viewAng / 2)
+            {
+                float dstToPlayer = Vector3.Distance(transform.position, player.position);
+                if (!Physics.Raycast(transform.position, dirToPlayer, dstToPlayer, obstacleMask))
+                {
+                    m_PlayerInRange = true;
+                    m_IsPatrol = false;
+                }
+                else
+                {
+                    m_PlayerInRange = false;
+                }
+            }
+            if (m_PlayerInRange)
+            {
+                m_PlayerPosition = player.transform.position;
+            }
+        }
+    }
+
+    void SetNextDestination()
+    {
+        if (waypoints.Length == 0)
+        {
+            Debug.LogWarning("Waypoints array is empty.");
             return;
         }
 
-        currentPointIndex = Random.Range(0, patrolPoints.Length);
-        agent.SetDestination(patrolPoints[currentPointIndex].position);
+        if (m_CurrentWayPointIndex >= waypoints.Length)
+        {
+            m_CurrentWayPointIndex = 0;
+        }
+
+        navMeshAgent.SetDestination(waypoints[m_CurrentWayPointIndex].position);
     }
 }
