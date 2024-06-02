@@ -11,6 +11,12 @@ TagManager:
   - SF_Door
   - Chest
   - KeyCard
+  - parkourFakeTile
+  - RealKeyCard
+  - FakeKeyCard
+  - FakeKeyCard2
+  - FakeKeyCard3
+  - FakeKeyCard4
   layers:
   - Default
   - TransparentFX

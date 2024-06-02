@@ -18,12 +18,15 @@ public class Crate : MonoBehaviour
 
     private void Start()
     {
+
         Debug.Log(hasKey);
+        Debug.Log(CrateTrigger);
         keyCardRenderer.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("testing"); Debug.Log(CrateTrigger);
         if (other.CompareTag("Player") && CrateTrigger)
         {
             if (isOpen && !hasKey)
