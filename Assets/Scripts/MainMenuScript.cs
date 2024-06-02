@@ -16,7 +16,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void LoadSettingsScene()
     {
-        SceneManager.LoadScene("Settings");
+        SceneManager.LoadScene("Instructions");
     }
 
     public void LoadFirstLevelScene()
