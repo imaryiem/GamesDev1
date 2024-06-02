@@ -8,6 +8,8 @@ public class ThirdRoomDoor : MonoBehaviour
     [SerializeField] private bool thirdDoorOpenTrigger = false;
     [SerializeField] private bool thirdDoorCloseTrigger = false;
 
+    [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the UI Manager
+
     private bool isOpening = false;
     private bool isClosing = false;
 
@@ -29,17 +31,17 @@ public class ThirdRoomDoor : MonoBehaviour
             {
                 if (hasKey)
                 {
-                    Debug.Log("door is opening");
+                    //uiManager.ShowMessage("door is opening");
                     isOpening = true;
                 }
                 else
                 {
-                    Debug.Log("door is locked, please get the key");
+                    uiManager.ShowMessage("door is locked, please get the key");
                 }
             }
             else if (thirdDoorCloseTrigger)
             {
-                Debug.Log("door is closing");
+                // Debug.Log("door is closing");
                 isClosing = true;
             }
         }
@@ -49,6 +51,9 @@ public class ThirdRoomDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+
+            uiManager.ClearMessage();  // Clear the message when the player leaves
+
             if (thirdDoorOpenTrigger)
             {
                 isOpening = false;

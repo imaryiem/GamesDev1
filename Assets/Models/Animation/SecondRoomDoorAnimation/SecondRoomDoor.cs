@@ -12,6 +12,7 @@ public class SecondRoomDoor : MonoBehaviour
     private bool isClosing = false;
 
     [SerializeField] private Crate crate = null;
+    [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the ThirdLevelUIManager
 
     private bool hasKey = false;
 
@@ -28,17 +29,17 @@ public class SecondRoomDoor : MonoBehaviour
             {
                 if (hasKey)
                 {
-                    Debug.Log("Press F to open the second door");
+                    uiManager.ShowMessage("Press F to open the second door"); // Use ThirdLevelUIManager to display message
                     isOpening = true;
                 }
                 else
                 {
-                    Debug.Log("You do not have the key");
+                    uiManager.ShowMessage("You do not have the key"); // Use ThirdLevelUIManager to display message
                 }
             }
             else if (triggerClose)
             {
-                Debug.Log("Door will close automatically");
+                // Debug.Log("Door will close automatically");
                 isClosing = true;
             }
         }
@@ -48,6 +49,8 @@ public class SecondRoomDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            uiManager.ClearMessage();  // Clear the message when the player leaves
+
             if (triggerOpen)
             {
                 isOpening = false;
@@ -74,7 +77,6 @@ public class SecondRoomDoor : MonoBehaviour
             mySecondDoor.Play("SecondRoomDoorClose", 0, 0.0f);
             isClosing = false;
             gameObject.SetActive(false);
-            Debug.Log(hasKey);
         }
     }
 }

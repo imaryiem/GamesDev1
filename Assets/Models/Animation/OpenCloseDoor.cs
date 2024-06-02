@@ -8,14 +8,15 @@ public class Door : MonoBehaviour
     [SerializeField] private bool triggerOpen = false;
     [SerializeField] private bool triggerClose = false;
     [SerializeField] private GameObject keypadUI = null;  // Reference to the Keypad UI
+    [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the UI Manager
 
     private bool isOpening = false;
     private bool isClosing = false;
     private bool isPlayerNear = false;  // Track if the player is near the door
 
-    private void start()
+    private void Start()
     {
-        keypadUI.SetActive(true);
+        keypadUI.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,12 +27,12 @@ public class Door : MonoBehaviour
 
             if (triggerOpen)
             {
-                Debug.Log("Press F to open the door");
+                uiManager.ShowMessage("Press F to open the door");
                 isOpening = true;
             }
             else if (triggerClose)
             {
-                Debug.Log("Door will close automatically");
+                //Debug.Log("Door will close automatically");
                 isClosing = true;
             }
         }
@@ -41,6 +42,7 @@ public class Door : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            uiManager.ClearMessage();
             isPlayerNear = false;
 
             if (triggerOpen)
@@ -61,6 +63,7 @@ public class Door : MonoBehaviour
     {
         if (isOpening && isPlayerNear && Input.GetKeyDown(KeyCode.F))
         {
+            uiManager.ClearMessage();
             keypadUI.SetActive(true);  // Show the keypad UI
             Cursor.lockState = CursorLockMode.None;  // Unlock the cursor
             Cursor.visible = true;  // Make the cursor visible
