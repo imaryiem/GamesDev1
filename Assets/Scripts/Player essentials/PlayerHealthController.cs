@@ -23,9 +23,10 @@ public class PlayerHealthController : MonoBehaviour
         healthLabel.text = health + "%";
     }
 
-    public void DealDamage()
+    public void TakeDamage(int dmgAmount)
     {
-        health -= RandomHealthAmountGenerator(7, 22);
+        //health -= RandomHealthAmountGenerator(7, 22);
+        health -= dmgAmount;
         //Debug.Log("current health: " + health + "%");
 
         RefreshLabelColor();
@@ -79,11 +80,19 @@ public class PlayerHealthController : MonoBehaviour
         return Random.Range(min, max + 1);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyTesting")
+    //    {
+    //        TakeDamage(RandomHealthAmountGenerator(7, 22));
+    //    }
+    //}
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "EnemyTesting")
+        if (other.tag == "Enemy" || other.tag == "EnemyTesting")
         {
-            DealDamage();
+            TakeDamage(RandomHealthAmountGenerator(7, 22));
         }
     }
 
@@ -98,7 +107,7 @@ public class PlayerHealthController : MonoBehaviour
         else if (debugMode && Keyboard.current.gKey.wasPressedThisFrame)
         {
             // 'G' key for simulating damage taken
-            DealDamage();
+            TakeDamage(RandomHealthAmountGenerator(7, 22));
         }
 
         if (health <= 0 && Keyboard.current.spaceKey.wasPressedThisFrame)

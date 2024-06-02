@@ -5,6 +5,9 @@ public class CollectibleManager : MonoBehaviour
     private PlayerHealthController healthController;
 
     private bool ignoreHealing = false;
+    private bool isHealthRegenerating = false;
+    private float healthRegen = 5.0f;
+    private float regenRate = 3.0f;
 
     private void Awake()
     {
