@@ -16,6 +16,7 @@ TagManager:
   - FakeKeyCard
   - HealthCollectible
   - EnemyTesting
+  - Enemy
   - GameOverMenu
   layers:
   - Default
