@@ -4,12 +4,25 @@ using UnityEngine.InputSystem;
 
 public class PlayerHealthController : MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip audioClip;
+
+    private GameObject gameOverMenu;
+    private InputManager im;
     private bool debugMode = false; // Allows pressing the 'H' or 'G' keys to simulate the player healing or taking damage.
 
     [SerializeField] private TextMeshProUGUI healthLabel;
 
     [Header("Monitor health (do not edit)")]
     [SerializeField] private int health = 100;
+
+    private void Awake()
+    {
+        gameOverMenu = GameObject.FindGameObjectWithTag("GameOverMenu");
+        gameOverMenu.SetActive(false);
+        im = FindObjectOfType<InputManager>();
+        audioSource = GetComponent<AudioSource>();
+    }
 
     public int Health()
     {
@@ -32,8 +45,10 @@ public class PlayerHealthController : MonoBehaviour
         RefreshLabelColor();
 
         if (health <= 0) {
-            Debug.Log("Player has died, Game Over...!");
-            Debug.Log("Press 'spacebar' to try again!");
+            //Debug.Log("Player has died, Game Over...!");
+            //Debug.Log("Press 'spacebar' to try again!");
+            DisplayGameOverMenu();
+            health = 0;
         }
 
         healthLabel.text = health + "%";
@@ -57,6 +72,15 @@ public class PlayerHealthController : MonoBehaviour
 
         RefreshLabelColor();
         healthLabel.text = health + "%";
+    }
+
+    private void DisplayGameOverMenu()
+    {
+        audioSource.PlayOneShot(audioClip);
+        im.keyBindings.Disable();
+        im.DisplayCursor(true);
+        Time.timeScale = 0f;
+        gameOverMenu.SetActive(true);
     }
 
     private void RefreshLabelColor()
@@ -112,12 +136,12 @@ public class PlayerHealthController : MonoBehaviour
             TakeDamage(RandomHealthAmountGenerator(7, 22));
         }
 
-        if (health <= 0 && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            Debug.Log("Retrying...");
-            ResetHealth();
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // doesnt work well
-            // thinking of just moving the character back instead
-        }
+        //if (health <= 0 && Keyboard.current.spaceKey.wasPressedThisFrame)
+        //{
+        //    Debug.Log("Retrying...");
+        //    ResetHealth();
+        //    //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // doesnt work well
+        //    // thinking of just moving the character back instead
+        //}
     }
 }

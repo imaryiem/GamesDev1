@@ -11,10 +11,14 @@ TagManager:
   - SF_Door
   - Chest
   - KeyCard
+  - parkourFakeTile
+  - RealKeyCard
+  - FakeKeyCard
   - HealthCollectible
   - EnemyTesting
   - Enemy
   - Fire
+  - GameOverMenu
   layers:
   - Default
   - TransparentFX
