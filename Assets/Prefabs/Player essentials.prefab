@@ -704,6 +704,7 @@ GameObject:
   - component: {fileID: 5512777218127771193}
   - component: {fileID: 3374689256528736376}
   - component: {fileID: 1016145608924611381}
+  - component: {fileID: 3501651321401835742}
   - component: {fileID: 1079914946302673209}
   m_Layer: 0
   m_Name: Banana Man
@@ -901,6 +902,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddaa5af0827a6314399343828dff02da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3501651321401835742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854369615297573088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9179e2c3ebda8b43b00fe797a15612c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioToPlayIndex: 0
+  audioClips:
+  - {fileID: 8300000, guid: 88b88c64ead51b04a80acf501f38bc06, type: 3}
+  - {fileID: 8300000, guid: bc08a05e999a94849ae9560c497a3cc1, type: 3}
 --- !u!82 &1079914946302673209
 AudioSource:
   m_ObjectHideFlags: 0
