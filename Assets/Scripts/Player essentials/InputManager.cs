@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
-    private Keybindings keyBindings;
+    public Keybindings keyBindings;
     private AnimatorManager am;
     private GameObject pauseMenu;
 
@@ -118,6 +120,12 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    // Called when button pressed during game over
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     // Helper functions
 
     private void ResetDash()
@@ -128,7 +136,7 @@ public class InputManager : MonoBehaviour
         //Debug.Log("dashing completed/ reset");
     }
 
-    private void DisplayCursor(bool visibility)
+    public void DisplayCursor(bool visibility)
     {
         if (visibility)
         {
