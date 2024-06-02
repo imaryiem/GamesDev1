@@ -13,6 +13,7 @@ TagManager:
   - KeyCard
   - HealthCollectible
   - EnemyTesting
+  - GameOverMenu
   layers:
   - Default
   - TransparentFX
