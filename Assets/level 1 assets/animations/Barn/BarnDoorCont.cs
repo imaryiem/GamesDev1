@@ -5,6 +5,7 @@ using UnityEngine;
 public class BarnDoorCont : MonoBehaviour
 {
    [SerializeField] private Animator myBarn = null;
+   [SerializeField] private UIManager uiManager = null; 
 
     private bool playerInTrigger = false;
     private bool isBarnOpen = false;
@@ -22,6 +23,7 @@ public class BarnDoorCont : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInTrigger = false;
+            uiManager.ShowMessage("");
         }
     }
 
@@ -31,11 +33,11 @@ public class BarnDoorCont : MonoBehaviour
         {
             if (isBarnOpen)
             {
-                Debug.Log("Press F to close the Barn");
+                uiManager.ShowMessage("Press F to close the Barn");
             }
             else
             {
-                Debug.Log("Press F to open the Barn");
+                uiManager.ShowMessage("Press F to open the Barn");
             }
 
             if (Input.GetKeyDown(KeyCode.F))

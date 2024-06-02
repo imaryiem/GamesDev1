@@ -13,6 +13,8 @@ TagManager:
   - KeyCard
   - HealthCollectible
   - EnemyTesting
+  - Enemy
+  - Fire
   layers:
   - Default
   - TransparentFX

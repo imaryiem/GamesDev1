@@ -90,9 +90,11 @@ public class PlayerHealthController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.tag == "Enemy" || other.tag == "EnemyTesting")
         {
             TakeDamage(RandomHealthAmountGenerator(7, 22));
+            Debug.Log(other.name);
         }
     }
 
