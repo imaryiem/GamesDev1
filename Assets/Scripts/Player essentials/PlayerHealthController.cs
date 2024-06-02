@@ -4,12 +4,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerHealthController : MonoBehaviour
 {
-    private bool debugMode = true; // Allows pressing the 'H' key to simulate the player being hit
+    private bool debugMode = false; // Allows pressing the 'H' or 'G' keys to simulate the player healing or taking damage.
 
     [SerializeField] private TextMeshProUGUI healthLabel;
 
     [Header("Monitor health (do not edit)")]
     [SerializeField] private int health = 100;
+
+    public int Health()
+    {
+        return health;
+    }
 
     public void ResetHealth()
     {
@@ -18,16 +23,12 @@ public class PlayerHealthController : MonoBehaviour
         healthLabel.text = health + "%";
     }
 
-    public void DealDamage(int damageAmount)
+    public void DealDamage()
     {
-        health -= damageAmount;
+        health -= RandomHealthAmountGenerator(7, 22);
         //Debug.Log("current health: " + health + "%");
 
-        healthLabel.color = Color.green;
-        if (health < 50)
-        {
-            healthLabel.color = Color.red;
-        }
+        RefreshLabelColor();
 
         if (health <= 0) {
             Debug.Log("Player has died, Game Over...!");
@@ -37,16 +38,67 @@ public class PlayerHealthController : MonoBehaviour
         healthLabel.text = health + "%";
     }
 
-    private void SimulatePlayerHit()
+    public void Heal()
     {
-        DealDamage(20);
+        switch (health)
+        {
+            case > 100:
+                health += 0;
+                break;
+            case 100:
+                health += 25; //so new max would be 125 health points
+                break;
+            default:
+                health += RandomHealthAmountGenerator(10, 18);
+                if (health > 100) health = 100;
+                break;
+        }
+
+        RefreshLabelColor();
+        healthLabel.text = health + "%";
+    }
+
+    private void RefreshLabelColor()
+    {
+        switch (health)
+        {
+            case < 50:
+                healthLabel.color = Color.red;
+                break;
+            case <= 100:
+                healthLabel.color = Color.green;
+                break;
+            default:
+                healthLabel.color = Color.cyan;
+                break;
+        }
+    }
+
+    private int RandomHealthAmountGenerator(int min, int max)
+    {
+        return Random.Range(min, max + 1);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "EnemyTesting")
+        {
+            DealDamage();
+        }
     }
 
     private void Update()
     {
+        // Simulate damage being taken (for debugging)
         if (debugMode && Keyboard.current.hKey.wasPressedThisFrame)
         {
-            SimulatePlayerHit();
+            // 'H' key for simulating for healing
+            Heal();
+        }
+        else if (debugMode && Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            // 'G' key for simulating damage taken
+            DealDamage();
         }
 
         if (health <= 0 && Keyboard.current.spaceKey.wasPressedThisFrame)

@@ -11,6 +11,8 @@ TagManager:
   - SF_Door
   - Chest
   - KeyCard
+  - HealthCollectible
+  - EnemyTesting
   layers:
   - Default
   - TransparentFX
