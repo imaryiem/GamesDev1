@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerHealthController : MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip audioClip;
+
     private GameObject gameOverMenu;
     private InputManager im;
     private bool debugMode = false; // Allows pressing the 'H' or 'G' keys to simulate the player healing or taking damage.
@@ -18,6 +21,7 @@ public class PlayerHealthController : MonoBehaviour
         gameOverMenu = GameObject.FindGameObjectWithTag("GameOverMenu");
         gameOverMenu.SetActive(false);
         im = FindObjectOfType<InputManager>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public int Health()
@@ -72,6 +76,7 @@ public class PlayerHealthController : MonoBehaviour
 
     private void DisplayGameOverMenu()
     {
+        audioSource.PlayOneShot(audioClip);
         im.keyBindings.Disable();
         im.DisplayCursor(true);
         Time.timeScale = 0f;
