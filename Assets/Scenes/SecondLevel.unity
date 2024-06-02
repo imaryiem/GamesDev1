@@ -452,6 +452,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Graveyard_wall (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4244268427382144, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
@@ -1097,6 +1105,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1854369615297573088, guid: 2af42242701f3334980408b16638f86d, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 4361899068456512097, guid: 2af42242701f3334980408b16638f86d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1149,6 +1161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player essentials
       objectReference: {fileID: 0}
+    - target: {fileID: 9208171868048010361, guid: 2af42242701f3334980408b16638f86d, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1166,6 +1182,7 @@ GameObject:
   - component: {fileID: 429354141}
   - component: {fileID: 429354140}
   - component: {fileID: 429354139}
+  - component: {fileID: 429354143}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1188,7 +1205,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1259,6 +1276,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &429354143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429354138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6527983fafa9b54c9008d528f942f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCrate: {fileID: 1974833250}
+  CrateTrigger: 1
+  isOpen: 0
 --- !u!1001 &499473936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2396,6 +2428,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Graveyard_wall (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4244268427382144, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
@@ -2871,6 +2911,14 @@ PrefabInstance:
     - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_Name
       value: Graveyard_wall (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4244268427382144, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_LocalScale.x
@@ -3712,6 +3760,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Graveyard_wall (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4244268427382144, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_LocalScale.x
       value: 13
@@ -3780,6 +3836,14 @@ PrefabInstance:
     - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_Name
       value: Graveyard_wall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4244268427382144, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_LocalScale.x
@@ -4186,6 +4250,14 @@ PrefabInstance:
     - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_Name
       value: Graveyard_wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573284199375500, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4244268427382144, guid: 3da074a71c3410243bdd84d882fac08a, type: 3}
       propertyPath: m_LocalScale.x
