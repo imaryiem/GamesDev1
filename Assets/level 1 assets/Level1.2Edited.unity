@@ -2568,11 +2568,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7691004480965848220, guid: 2af42242701f3334980408b16638f86d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.93
+      value: 56.6
       objectReference: {fileID: 0}
     - target: {fileID: 7691004480965848220, guid: 2af42242701f3334980408b16638f86d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.86
+      value: 23.9
       objectReference: {fileID: 0}
     - target: {fileID: 7701262970469856083, guid: 2af42242701f3334980408b16638f86d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -33496,7 +33496,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.3
+  m_Intensity: 0.33
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -54245,7 +54245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d263828931f0ee94fb1d3547f2f7fd56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 3
+  sceneIndex: 2
 --- !u!1001 &1808641881
 PrefabInstance:
   m_ObjectHideFlags: 0
