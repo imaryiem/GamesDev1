@@ -14,9 +14,8 @@ TagManager:
   - parkourFakeTile
   - RealKeyCard
   - FakeKeyCard
-  - FakeKeyCard2
-  - FakeKeyCard3
-  - FakeKeyCard4
+  - HealthCollectible
+  - EnemyTesting
   layers:
   - Default
   - TransparentFX
