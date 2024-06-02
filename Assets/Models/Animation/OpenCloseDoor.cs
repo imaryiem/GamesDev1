@@ -7,14 +7,23 @@ public class Door : MonoBehaviour
     [SerializeField] private Animator myDoor = null;
     [SerializeField] private bool triggerOpen = false;
     [SerializeField] private bool triggerClose = false;
+    [SerializeField] private GameObject keypadUI = null;  // Reference to the Keypad UI
 
     private bool isOpening = false;
     private bool isClosing = false;
+    private bool isPlayerNear = false;  // Track if the player is near the door
+
+    private void start()
+    {
+        keypadUI.SetActive(true);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            isPlayerNear = true;
+
             if (triggerOpen)
             {
                 Debug.Log("Press F to open the door");
@@ -32,9 +41,14 @@ public class Door : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            isPlayerNear = false;
+
             if (triggerOpen)
             {
                 isOpening = false;
+                keypadUI.SetActive(false);  // Hide the keypad UI if the player moves away
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             else if (triggerClose)
             {
@@ -45,10 +59,11 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if (isOpening && Input.GetKeyDown(KeyCode.F))
+        if (isOpening && isPlayerNear && Input.GetKeyDown(KeyCode.F))
         {
-            myDoor.Play("doorOpen", 0, 0.0f);
-            isOpening = false;
+            keypadUI.SetActive(true);  // Show the keypad UI
+            Cursor.lockState = CursorLockMode.None;  // Unlock the cursor
+            Cursor.visible = true;  // Make the cursor visible
         }
 
         if (isClosing)
@@ -56,6 +71,17 @@ public class Door : MonoBehaviour
             myDoor.Play("doorClose", 0, 0.0f);
             isClosing = false;
             gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor
+            Cursor.visible = false;  // Hide the cursor
         }
+    }
+
+    public void OpenDoor()
+    {
+        myDoor.Play("doorOpen", 0, 0.0f);
+        isOpening = false;
+        keypadUI.SetActive(false);  // Hide the keypad UI when the door is opened
+        Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor
+        Cursor.visible = false;  // Hide the cursor
     }
 }
