@@ -11,6 +11,9 @@ TagManager:
   - SF_Door
   - Chest
   - KeyCard
+  - parkourFakeTile
+  - RealKeyCard
+  - FakeKeyCard
   - HealthCollectible
   - EnemyTesting
   - GameOverMenu
