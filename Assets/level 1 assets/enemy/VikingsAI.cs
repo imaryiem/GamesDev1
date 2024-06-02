@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class FollowPlayerOnSight : MonoBehaviour
 {
+    [SerializeField] private Animator charMovement = null;
     public NavMeshAgent navMeshAgent;
     public float stratWaitTime = 4;
     public float timeToRotate = 2;
@@ -61,6 +62,8 @@ public class FollowPlayerOnSight : MonoBehaviour
         {
             Patroling();
         }
+
+        UpdateAnimationState();
     }
 
     private void Chasing()
@@ -229,5 +232,21 @@ public class FollowPlayerOnSight : MonoBehaviour
         }
 
         navMeshAgent.SetDestination(waypoints[m_CurrentWayPointIndex].position);
+    }
+
+    void UpdateAnimationState()
+    {
+        if (navMeshAgent.velocity.sqrMagnitude < 0.1f)
+        {
+            charMovement.Play("idle");
+        }
+        else if (navMeshAgent.speed == speedRun)
+        {
+            charMovement.Play("running");
+        }
+        else if (navMeshAgent.speed == speedWalk)
+        {
+            charMovement.Play("walk");
+        }
     }
 }

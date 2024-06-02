@@ -99,5 +99,5 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MoveDirection: {r: -0.2, g: 0, b: 0.1, a: 0}
     - _Tiling: {r: 1, g: 1, b: 1, a: 1}
-    - _WaterColor: {r: 0.16738753, g: 0.6252983, b: 0.9485294, a: 1}
+    - _WaterColor: {r: 0.060730003, g: 0.03704517, b: 0.32941177, a: 1}
   m_BuildTextureStacks: []

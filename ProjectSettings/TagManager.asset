@@ -17,6 +17,7 @@ TagManager:
   - HealthCollectible
   - EnemyTesting
   - Enemy
+  - Fire
   - GameOverMenu
   layers:
   - Default
