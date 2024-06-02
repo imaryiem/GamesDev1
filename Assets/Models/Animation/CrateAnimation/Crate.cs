@@ -7,7 +7,9 @@ public class Crate : MonoBehaviour
     [SerializeField] private Animator myCrate = null;
     [SerializeField] private bool CrateTrigger = false;
     [SerializeField] private Renderer keyCardRenderer = null;
+    [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the UI Manager
 
+    private bool test = false;
     private bool isOpen = false;
     private bool hasKey = false;
 
@@ -18,7 +20,6 @@ public class Crate : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(hasKey);
         keyCardRenderer.enabled = false;
     }
 
@@ -26,13 +27,14 @@ public class Crate : MonoBehaviour
     {
         if (other.CompareTag("Player") && CrateTrigger)
         {
+            test = true;
             if (isOpen && !hasKey)
             {
-                Debug.Log("Press E to get the key");
+                uiManager.ShowMessage("Press E to get the key");
             }
             else if (!isOpen)
             {
-                Debug.Log("Press F to open the Crate");
+                uiManager.ShowMessage("Press F to open the Crate");
             }
         }
     }
@@ -41,7 +43,8 @@ public class Crate : MonoBehaviour
     {
         if (other.CompareTag("Player") && CrateTrigger)
         {
-            Debug.Log("Player left the Crate proximity");
+            test = false;
+            uiManager.ClearMessage();  // Clear the message when the player leaves
             if (isOpen)
             {
                 CloseCrate();
@@ -51,7 +54,7 @@ public class Crate : MonoBehaviour
 
     private void Update()
     {
-        if (CrateTrigger && Input.GetKeyDown(KeyCode.F) && !isOpen)
+        if (test && CrateTrigger && Input.GetKeyDown(KeyCode.F) && !isOpen)
         {
             OpenCrate();
         }
@@ -67,6 +70,7 @@ public class Crate : MonoBehaviour
         myCrate.Play("openCrate", 0, 0.0f);
         isOpen = true;
         keyCardRenderer.enabled = true; // Enable the key card renderer
+        uiManager.ShowMessage("Press E to get the key");
     }
 
     private void CloseCrate()
@@ -81,8 +85,8 @@ public class Crate : MonoBehaviour
         if (isOpen && !hasKey)
         {
             hasKey = true;
-            keyCardRenderer.enabled = false; // Disable the key card renderer
-            Debug.Log("You disabled the keycard!");
+            keyCardRenderer.gameObject.SetActive(false); // Disable the key card renderer
+            uiManager.ClearMessage();  // Clear the message once the key is taken
         }
     }
 }
