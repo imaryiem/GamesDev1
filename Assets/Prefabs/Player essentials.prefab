@@ -702,6 +702,7 @@ GameObject:
   - component: {fileID: 2070631868564533635}
   - component: {fileID: 5512777218127771193}
   - component: {fileID: 3374689256528736376}
+  - component: {fileID: 1016145608924611381}
   m_Layer: 0
   m_Name: Banana Man
   m_TagString: Untagged
@@ -863,6 +864,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthLabel: {fileID: 442622913869811786}
+  health: 100
+--- !u!114 &1016145608924611381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854369615297573088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddaa5af0827a6314399343828dff02da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2087803788799407812
 GameObject:
   m_ObjectHideFlags: 0
