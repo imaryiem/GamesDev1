@@ -885,7 +885,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c8da3494f9f924c977c2ee9fa55cad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverAudio: {fileID: 2294339009250427224}
   healthLabel: {fileID: 442622913869811786}
   health: 100
 --- !u!114 &1016145608924611381
@@ -3782,7 +3781,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 95bd9e41697b6bd4fa826984d63cfb1c, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
