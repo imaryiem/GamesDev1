@@ -7,6 +7,9 @@ public class SecondRoomDoor : MonoBehaviour
     [SerializeField] private Animator mySecondDoor = null;
     [SerializeField] private bool triggerOpen = false;
     [SerializeField] private bool triggerClose = false;
+    [SerializeField] private AudioSource doorAudioSource = null; 
+    [SerializeField] private AudioClip doorOpenSound = null; 
+    [SerializeField] private AudioClip doorCloseSound = null; 
 
     private bool isOpening = false;
     private bool isClosing = false;
@@ -15,6 +18,15 @@ public class SecondRoomDoor : MonoBehaviour
     [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the ThirdLevelUIManager
 
     private bool hasKey = false;
+
+
+    private void PlayDoorSound(AudioClip sound)
+    {
+        if (doorAudioSource && sound)
+        {
+            doorAudioSource.PlayOneShot(sound); // Play the specified sound
+        }
+    }
 
     private void Start()
     {
@@ -70,6 +82,7 @@ public class SecondRoomDoor : MonoBehaviour
         {
             mySecondDoor.Play("SecondRoomDoorOpen", 0, 0.0f);
             isOpening = false;
+            PlayDoorSound(doorOpenSound);
         }
 
         if (isClosing)
@@ -77,6 +90,7 @@ public class SecondRoomDoor : MonoBehaviour
             mySecondDoor.Play("SecondRoomDoorClose", 0, 0.0f);
             isClosing = false;
             gameObject.SetActive(false);
+            PlayDoorSound(doorCloseSound);
         }
     }
 }

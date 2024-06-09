@@ -9,10 +9,23 @@ public class Door : MonoBehaviour
     [SerializeField] private bool triggerClose = false;
     [SerializeField] private GameObject keypadUI = null;  // Reference to the Keypad UI
     [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the UI Manager
+    [SerializeField] private AudioSource doorAudioSource = null; 
+    [SerializeField] private AudioClip doorOpenSound = null; 
+    [SerializeField] private AudioClip doorCloseSound = null; 
+
 
     private bool isOpening = false;
     private bool isClosing = false;
     private bool isPlayerNear = false;  // Track if the player is near the door
+
+
+    private void PlayDoorSound(AudioClip sound)
+    {
+        if (doorAudioSource && sound)
+        {
+            doorAudioSource.PlayOneShot(sound); // Play the specified sound
+        }
+    }
 
     private void Start()
     {
@@ -76,6 +89,7 @@ public class Door : MonoBehaviour
             gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor
             Cursor.visible = false;  // Hide the cursor
+            PlayDoorSound(doorCloseSound);
         }
     }
 
@@ -86,5 +100,7 @@ public class Door : MonoBehaviour
         keypadUI.SetActive(false);  // Hide the keypad UI when the door is opened
         Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor
         Cursor.visible = false;  // Hide the cursor
+        PlayDoorSound(doorOpenSound);
+        
     }
 }
