@@ -8,6 +8,9 @@ public class Crate : MonoBehaviour
     [SerializeField] private bool CrateTrigger = false;
     [SerializeField] private Renderer keyCardRenderer = null;
     [SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the UI Manager
+    [SerializeField] private AudioSource doorAudioSource = null; 
+    [SerializeField] private AudioClip doorOpenSound = null; 
+    [SerializeField] private AudioClip doorCloseSound = null; 
 
     private bool test = false;
     private bool isOpen = false;
@@ -18,6 +21,13 @@ public class Crate : MonoBehaviour
         return hasKey;
     }
 
+    private void PlayDoorSound(AudioClip sound)
+    {
+        if (doorAudioSource && sound)
+        {
+            doorAudioSource.PlayOneShot(sound); // Play the specified sound
+        }
+    }
     private void Start()
     {
         keyCardRenderer.enabled = false;
@@ -71,6 +81,7 @@ public class Crate : MonoBehaviour
         isOpen = true;
         keyCardRenderer.enabled = true; // Enable the key card renderer
         uiManager.ShowMessage("Press E to get the key");
+        PlayDoorSound(doorOpenSound);
     }
 
     private void CloseCrate()
@@ -78,6 +89,7 @@ public class Crate : MonoBehaviour
         myCrate.Play("closeCrate", 0, 0.0f);
         isOpen = false;
         keyCardRenderer.enabled = false; // Disable the key card renderer
+        PlayDoorSound(doorCloseSound);
     }
 
     private void DisableKeyCard()
