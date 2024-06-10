@@ -5,81 +5,83 @@ using UnityEngine.SceneManagement;
 
 public class Exit : MonoBehaviour
 {
-    [SerializeField] private Animator myExit = null;
-    [SerializeField] private bool triggerOpen = false;
-    [SerializeField] private bool triggerClose = false;
+    [SerializeField] private Animator door = null;
+    [SerializeField] private Grave grave = null;
+    [SerializeField] private AudioSource gateAudioSource = null; // Reference to the AudioSource for gate sound
+    [SerializeField] private AudioClip gateOpenSound = null; // Sound clip for gate opening
+    [SerializeField] private UIManager uiManager = null;
 
-    private bool isOpening = false;
-    private bool isClosing = false;
-
-    [SerializeField] private Grave Grave = null;
-    //[SerializeField] private thirdLevelUIManager uiManager = null; // Reference to the ThirdLevelUIManager
-
-    private bool hasKey = false;
-
-    private void Start()
-    {
-        hasKey = Grave.GetHasKey();
-    }
+    private bool playerInTrigger = false;
+    private bool isDoorOpen = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (triggerOpen)
-            {
-                if (hasKey)
-                {
-                    // uiManager.ShowMessage("Press F to open the second door"); // Use ThirdLevelUIManager to display message
-                    isOpening = true;
-                }
-                else
-                {
-                    // uiManager.ShowMessage("You do not have the key"); // Use ThirdLevelUIManager to display message
-                }
-            }
-            else if (triggerClose)
-            {
-                // Debug.Log("Door will close automatically");
-                isClosing = true;
-            }
-            SceneManager.LoadScene(3); 
+            playerInTrigger = true;
         }
-        
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // uiManager.ClearMessage();  // Clear the message when the player leaves
-
-            if (triggerOpen)
-            {
-                isOpening = false;
-            }
-            else if (triggerClose)
-            {
-                isClosing = false;
-            }
+            playerInTrigger = false;
+            uiManager.ShowMessage("");
         }
     }
 
     private void Update()
     {
-        hasKey = Grave.GetHasKey(); // Retrieve the hasKey value each frame
-
-        if (isOpening && Input.GetKeyDown(KeyCode.F) && hasKey)
+        if (playerInTrigger)
         {
-            myExit.Play("exitOpen", 0, 0.0f);
-            isOpening = false;
+            if (grave == null)
+            {
+                Debug.LogError("Grave reference is not set in the Inspector.");
+            }
+
+            if (!isDoorOpen && grave.GetHasKey())
+            {
+                uiManager.ShowMessage("Press F to open the gate");
+            }
+            else if (!isDoorOpen && !grave.GetHasKey())
+            {
+                uiManager.ShowMessage("You need a key to open the gate");
+            }
+            else if (isDoorOpen)
+            {
+                uiManager.ShowMessage("Gate opened, exit to escape the zombies");
+            }
+
+            if (Input.GetKeyDown(KeyCode.F) && !isDoorOpen && grave.GetHasKey())
+            {
+                if (door == null)
+                {
+                    Debug.LogError("Door Animator reference is not set in the Inspector.");
+                    return;
+                }
+
+                door.Play("exitOpen", 0, 0.0f);
+                PlayGateSound(gateOpenSound);
+                isDoorOpen = true;
+            }
+        }
+    }
+
+    private void PlayGateSound(AudioClip sound)
+    {
+        if (gateAudioSource == null)
+        {
+            Debug.LogError("Gate AudioSource reference is not set in the Inspector.");
+            return;
         }
 
-        if (isClosing)
+        if (sound == null)
         {
-            myExit.Play("exitClose", 0, 0.0f);
-            isClosing = false;
-            gameObject.SetActive(false);
+            Debug.LogError("Gate Open Sound reference is not set in the Inspector.");
+            return;
         }
+
+        gateAudioSource.PlayOneShot(sound); // Play the specified sound
     }
 }
