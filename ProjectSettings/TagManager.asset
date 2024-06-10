@@ -19,6 +19,9 @@ TagManager:
   - Enemy
   - Fire
   - GameOverMenu
+  - MazeTrigger
+  - SecondTrigger
+  - ParkourTrigger
   layers:
   - Default
   - TransparentFX

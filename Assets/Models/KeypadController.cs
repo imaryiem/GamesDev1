@@ -13,8 +13,21 @@ public class KeypadController : MonoBehaviour
     // Call this method when a number button is pressed
     public void OnNumberButtonPressed(string number)
     {
-        inputCode += number;
-        displayText.text = inputCode;
+        if (inputCode.Length < 3)  // Limit input length to 3 characters
+        {
+            inputCode += number;
+            displayText.text = inputCode;
+        }
+    }
+
+    // Call this method when the Backspace button is pressed
+    public void OnBackspaceButtonPressed()
+    {
+        if (inputCode.Length > 0)
+        {
+            inputCode = inputCode.Substring(0, inputCode.Length - 1);  // Remove the last character
+            displayText.text = inputCode;
+        }
     }
 
     // Call this method when the Enter button is pressed

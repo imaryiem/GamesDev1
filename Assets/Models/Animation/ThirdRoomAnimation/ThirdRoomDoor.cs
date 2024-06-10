@@ -56,6 +56,7 @@ public class ThirdRoomDoor : MonoBehaviour
             {
                 // Debug.Log("door is closing");
                 isClosing = true;
+                uiManager.ShowVictoryMessage(); // Call the ShowVictoryMessage() function
             }
         }
     }
